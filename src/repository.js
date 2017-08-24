@@ -17,8 +17,7 @@ class Repository {
     }
 
     queryRef.on('child_added', (child) => {
-      const val = Object.assign({}, child.val(), {key: child.key})
-      callback(val)
+      callback(model.generateValue(child))
     }, (error) => {
       errorCallback(error)
     })
