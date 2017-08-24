@@ -6,6 +6,10 @@ class Model {
     this.path = config.path
   }
 
+  softDeleteKey () {
+    return this.config.softDelete ? { deleted: false } : { }
+  }
+
   valueSchema (data) {
     if (this.schema) {
       return Object.keys(this.schema).reduce((valSchema, key) => {
@@ -20,7 +24,9 @@ class Model {
   }
 
   generateValue (data) {
-    return Object.assign({}, this.valueSchema(data.val()), { key: data.key })
+    const key = data.key ? { key: data.key } : {}
+    const dataValue = data.val ? this.valueSchema(data.val()) : this.valueSchema(data)
+    return Object.assign({}, dataValue, key, this.softDeleteKey())
   }
 }
 

@@ -13,7 +13,7 @@ const Fish = new Model({
       defaultValue: null
     },
     length: {
-      defaultValue: null
+      defaultValue: 'unknown'
     },
     color: {
       defaultValue: ''
@@ -23,8 +23,10 @@ const Fish = new Model({
 
 const ExampleRepo = new Repository(firebase.database())
 
-ExampleRepo.onChildAdded(Fish, (fish) => {
-  console.log(fish)
-}, (error) => {
-  console.log(error)
+ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
+  ExampleRepo.onChildAdded(Fish, (fish) => {
+    console.log(fish)
+  }, (error) => {
+    console.log(error)
+  })
 })

@@ -8,7 +8,6 @@ class Repository {
   }
 
   onChildAdded (model, callback, errorCallback) {
-    // TODO the model can be responsible for creating refs
     const ref = this.database.ref(model.path)
     let queryRef = ref
 
@@ -23,6 +22,11 @@ class Repository {
     })
 
     return ref
+  }
+
+  push (model, data) {
+    const ref = this.database.ref(model.path)
+    return ref.push(model.generateValue(data))
   }
 }
 
