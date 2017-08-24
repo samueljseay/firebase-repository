@@ -7,7 +7,18 @@ firebase.initializeApp(config)
 
 const Fish = new Model({
   path: 'fish',
-  softDelete: true
+  softDelete: true,
+  schema: {
+    name: {
+      defaultValue: null
+    },
+    length: {
+      defaultValue: null
+    },
+    color: {
+      defaultValue: ''
+    }
+  }
 })
 
 const ExampleRepo = new Repository(firebase.database())
