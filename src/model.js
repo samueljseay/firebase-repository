@@ -3,7 +3,7 @@ class Model {
     this.config = config
     this.schema = config.schema
     this._paths = config.paths || []
-    this._path = config.path
+    this._path = config.path || config.paths[config.defaultPath] || ''
 
     this.generatePaths()
   }

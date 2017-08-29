@@ -6,6 +6,7 @@ const Repository = require('../src/repository')
 firebase.initializeApp(config)
 
 const Fish = new Model({
+  defaultPath: 'all',
   paths: {
     all: 'fish',
     byID: 'fish/{id}'
