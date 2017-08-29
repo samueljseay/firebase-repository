@@ -8,7 +8,7 @@ class Repository {
   }
 
   onChildAdded (model, callback, errorCallback) {
-    const ref = this.database.ref(model.path)
+    const ref = this.database.ref(model._path)
     let queryRef = ref
 
     if (model.config.softDelete) {
@@ -24,8 +24,21 @@ class Repository {
     return ref
   }
 
+  onValue (model, callback, errorCallback) {
+    const ref = this.database.ref(model._path)
+    let queryRef = ref
+
+    queryRef.on('value', (val) => {
+      callback(model.generateValue(val))
+    }, (error) => {
+      errorCallback(error)
+    })
+
+    return ref
+  }
+
   push (model, data) {
-    const ref = this.database.ref(model.path)
+    const ref = this.database.ref(model._path)
     return ref.push(model.generateValue(data))
   }
 }

@@ -42,7 +42,7 @@ const ExampleRepo = new Repository(firebase.database())
 // Red Cod will be created with a default value of 'unknown' for the length property
 ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
   ExampleRepo.onChildAdded(Fish, (fish) => {
-    // if a record comes back from the db that does not have a prop from the
+    // If a record comes back from the db that does not have a prop from the
     // schema it will also be populated with default values, this allows your
     // data to become more consistent over time by updating records with default
     // values. However this may be the kind of thing that leads to unusual behaviour

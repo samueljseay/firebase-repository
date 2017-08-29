@@ -6,27 +6,31 @@ const Repository = require('../src/repository')
 firebase.initializeApp(config)
 
 const Fish = new Model({
-  path: 'fish',
+  paths: {
+    all: 'fish',
+    byID: 'fish/{id}'
+  },
   softDelete: true,
   schema: {
     name: {
-      defaultValue: null
+      defaultValue: 'unknown'
     },
     length: {
       defaultValue: 'unknown'
     },
     color: {
-      defaultValue: ''
+      defaultValue: 'unknown'
     }
   }
 })
 
 const ExampleRepo = new Repository(firebase.database())
 
-ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
-  ExampleRepo.onChildAdded(Fish, (fish) => {
-    console.log(fish)
-  }, (error) => {
-    console.log(error)
-  })
+ExampleRepo.onChildAdded(Fish.all(), (fish) => {
+  console.log(fish)
+})
+
+ExampleRepo.onValue(Fish.byID({ id: '-KsIerpk2pBVdsGgkXWq' }), (fish) => {
+  console.log('*** fish by id ***')
+  console.log(fish)
 })

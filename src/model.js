@@ -1,9 +1,34 @@
-
 class Model {
   constructor (config) {
     this.config = config
     this.schema = config.schema
-    this.path = config.path
+    this._paths = config.paths || []
+    this._path = config.path
+
+    this.generatePaths()
+  }
+
+  generatePaths () {
+    Object.keys(this._paths).forEach((path) => {
+      this[path] = (params) => {
+        return this.path(this._paths[path], params)
+      }
+    })
+  }
+
+  path (path, params) {
+    let generatedPath
+
+    if (params) {
+      const pathKeys = Object.keys(params)
+      generatedPath = pathKeys.reduce((acc, key) => {
+        return acc.replace(`{${key}}`, params[key])
+      }, path)
+    } else {
+      generatedPath = path
+    }
+
+    return new Model(Object.assign({}, this.config, { path: generatedPath }))
   }
 
   softDeleteKey () {
@@ -24,9 +49,17 @@ class Model {
   }
 
   generateValue (data) {
-    const key = data.key ? { key: data.key } : {}
-    const dataValue = data.val ? this.valueSchema(data.val()) : this.valueSchema(data)
-    return Object.assign({}, dataValue, key, this.softDeleteKey())
+    if (data.val() !== null) {
+      // filter deleted records here as well as in repository
+      if (this.config.softDelete && data.val().deleted) {
+        return null
+      }
+      const key = data.key ? { key: data.key } : {}
+      const dataValue = data.val ? this.valueSchema(data.val()) : this.valueSchema(data)
+      return Object.assign({}, dataValue, key, this.softDeleteKey())
+    } else {
+      return null
+    }
   }
 }
 
