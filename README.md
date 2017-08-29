@@ -56,4 +56,5 @@ ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
 ## TODO
 
 1. Define an API for custom querying of models (could/should we support Querybase?)
-3. What else do schemas do? provide ways to support more rich data types? How does validation look?
+2. What else do schemas do? provide ways to support more rich data types? How does validation look?
+3. Use babel
