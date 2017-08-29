@@ -46,6 +46,11 @@ ExampleRepo.onValue(Fish.byID({ id: '-KsIerpk2pBVdsGgkXWq' }), (fish) => {
   console.log('*** fish by id ***')
   console.log(fish)
 })
+
+// Red Cod will be created with a default value of 'unknown' for the length property
+ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
+  console.log('done')
+})
 ```
 
 ## TODO
