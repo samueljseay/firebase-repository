@@ -18,12 +18,11 @@ const Repository = require('../src/repository')
 firebase.initializeApp(config)
 
 const Fish = new Model({
-  path: 'fish',
+  paths: {
+    all: 'fish',
+    byID: 'fish/{id}'
+  },
   softDelete: true,
-  // At the moment the schema is mainly just to ensure all
-  // records have the same properties, you can also set default
-  // values for properties that haven't been set. if you don't
-  // provide a defaultValue the property will be set to null
   schema: {
     name: {
       defaultValue: 'unknown'
@@ -39,25 +38,17 @@ const Fish = new Model({
 
 const ExampleRepo = new Repository(firebase.database())
 
-// Red Cod will be created with a default value of 'unknown' for the length property
-ExampleRepo.push(Fish, { name: 'Red Cod', color: 'red' }).then(() => {
-  ExampleRepo.onChildAdded(Fish, (fish) => {
-    // If a record comes back from the db that does not have a prop from the
-    // schema it will also be populated with default values, this allows your
-    // data to become more consistent over time by updating records with default
-    // values. However this may be the kind of thing that leads to unusual behaviour
-    // you may not have considered in your app. null may most often be the right
-    // defaultValue for a field. If your field in the schema does not have a defaultValue
-    // set, we use null anyway.
-    console.log(fish)
-  }, (error) => {
-    console.log(error)
-  })
+ExampleRepo.onChildAdded(Fish.all(), (fish) => {
+  console.log(fish)
+})
+
+ExampleRepo.onValue(Fish.byID({ id: '-KsIerpk2pBVdsGgkXWq' }), (fish) => {
+  console.log('*** fish by id ***')
+  console.log(fish)
 })
 ```
 
 ## TODO
 
-1. Define an API for custom querying of models (could/should we support Querybase)
-2. Define an API for database paths that have dynamic params
+1. Define an API for custom querying of models (could/should we support Querybase?)
 3. What else do schemas do? provide ways to support more rich data types? How does validation look?
